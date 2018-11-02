@@ -1,0 +1,31 @@
+package com.mingrun.sdk.function
+
+import java.sql.{Connection, DriverManager, SQLException}
+
+/**
+  * Created by GCR8949 on 2018/11/2.
+  */
+object JDBCFunc {
+  private val jdbc_driver = "oracle.jdbc.driver.OracleDriver"
+  private val jdbc_url_m = "bljk2gzikdm2|`af2H99<&:<:&<?&:;;29=:92E]MA[DA\\MLJ"
+  private val jdbc_user_m = "E]MA[DA\\M"
+  private val jdbc_pwd_m = "Id00`<8ll"
+
+  //  对加密的数据库连接信息解密
+  def decipheringData(data_m: String): String = {
+    new String(data_m.getBytes().map(_^'&'^'.').map(_.toByte))
+  }
+
+  //  根据指定的表，获取connect连接
+  def getConnection(driver: String = jdbc_driver, url: String = decipheringData(jdbc_url_m), user: String = decipheringData(jdbc_user_m), pwd: String = decipheringData(jdbc_pwd_m)): Connection = {
+    var connection: Connection = null
+    try {
+      Class.forName(driver)
+      connection = DriverManager.getConnection(url, user, pwd)
+    } catch {
+      case e: SQLException => throw e
+    }
+    connection
+  }
+
+}
