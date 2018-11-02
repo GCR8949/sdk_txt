@@ -1,0 +1,42 @@
+package com.mingrun.sdk.task
+
+import org.apache.spark.util.AccumulatorV2
+
+import scala.collection.mutable
+
+/**
+  * Created by GCR8949 on 2018/11/1.
+  */
+class LocationAccumulator extends AccumulatorV2[String, mutable.HashMap[String, String]]{
+  private var locationMap = new mutable.HashMap[String, String]()
+
+  override def isZero: Boolean = locationMap.isEmpty
+
+  override def copy(): AccumulatorV2[String, mutable.HashMap[String, String]] = {
+    val newACC = new LocationAccumulator()
+    locationMap.synchronized{
+      newACC.locationMap.clone()
+    }
+    newACC
+  }
+
+  override def reset(): Unit = locationMap.clear
+
+  override def add(v: String): Unit = {
+    val vs = v.split("\\|", -1)
+    val key = vs(0)
+    val location = locationMap.getOrElse(key, null)
+
+    if (location == null) {
+      locationMap.put(key, vs(1))
+    }
+  }
+
+  override def merge(other: AccumulatorV2[String, mutable.HashMap[String, String]]): Unit = {
+    other match {
+      case o: LocationAccumulator =>this.locationMap = this.locationMap.++(o.locationMap)
+    }
+  }
+
+  override def value: mutable.HashMap[String, String] = locationMap
+}
