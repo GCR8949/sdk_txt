@@ -16,13 +16,13 @@ object L_ALL_INDOOR {
     //  判断合规log所需的最短字段要求
     val fieldsMinSize = 100
     //  源数据地址
-    val dataPath = "G:\\TwoWF\\　　\\cell_in_0"
+    val dataPath = ""
     //  栅格匹配省市的conf文件地址
-    val confPath = "G:\\TwoWF\\　　\\conf.conf"
+    val confPath = ""
     //  栅格匹配场景的文件
-    val gridPath = "G:\\TwoWF\\　　\\GRID_GROUP.csv"
+    val gridPath = ""
 
-    val conf = new SparkConf().setAppName("L_I_CLASS_40_640_1280_INDOOR").setMaster("local[4]")
+    val conf = new SparkConf().setAppName("L_ALL_INDOOR").setMaster("local[4]")
     val sc = new SparkContext(conf)
 
     val dataRDD = sc.textFile(dataPath)
